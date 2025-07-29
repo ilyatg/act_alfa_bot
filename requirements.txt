@@ -1,0 +1,5 @@
+aiogram==3.20.0
+python-docx
+aspose-words
+yagmail
+
