@@ -5,7 +5,6 @@ import io
 from datetime import datetime
 from typing import List
 import tempfile
-
 import yagmail
 from aiogram import Bot, Dispatcher, F
 from aiogram.filters import Command
@@ -16,7 +15,6 @@ from aiogram.types import FSInputFile, Message, InlineKeyboardMarkup, InlineKeyb
 from docx import Document
 from docx.shared import Inches, Pt
 from docx.oxml.ns import qn
-import aspose.words as aw
 
 def convert_to_pdf(docx_path, pdf_path):
     doc = aw.Document(docx_path)
