@@ -228,12 +228,8 @@ async def generate_and_send_act(message: Message, state: FSMContext):
     temp_path_docx = os.path.join(tempfile.gettempdir(), filename)
     doc.save(temp_path_docx)
 
-    # Конвертация в PDF
-    temp_path_pdf = temp_path_docx.replace('.docx', '.pdf')
-    convert_to_pdf(temp_path_docx, temp_path_pdf)
-
-    # Отправка PDF файла пользователю
-    await message.answer_document(FSInputFile(temp_path_pdf), caption="✅ Акт составлен.")
+    # Отправка DOCX файла пользователю
+    await message.answer_document(FSInputFile(temp_path_docx), caption="✅ Акт составлен.")
     
     # Определяем действия для отправки
     action = data.get("send_action", "send_none")
@@ -243,7 +239,7 @@ async def generate_and_send_act(message: Message, state: FSMContext):
         try:
             await bot.send_document(
                 chat_id=GROUP_ID, 
-                document=FSInputFile(temp_path_pdf), 
+                document=FSInputFile(temp_path_docx), 
                 caption=f"📄 Новый акт дефектовки от @{message.from_user.username}"
             )
             await message.answer(f"✅ Акт отправлен в группу {GROUP_ID}")
@@ -259,7 +255,7 @@ async def generate_and_send_act(message: Message, state: FSMContext):
                 to=data["email"],
                 subject=f"Акт дефектовки {datetime.today().strftime('%d.%m.%Y')}",
                 contents="В приложении акт осмотра.",
-                attachments=temp_path_pdf
+                attachments=temp_path_docx  # Изменено на DOCX
             )
             await message.answer(f"📧 Акт отправлен на {data['email']}")
         except Exception as e:
@@ -268,6 +264,7 @@ async def generate_and_send_act(message: Message, state: FSMContext):
 
     await state.clear()
     await message.answer("🏠 Возврат в главное меню:", reply_markup=get_main_menu())
+
 
 if __name__ == "__main__":
     import asyncio
