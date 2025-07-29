@@ -266,4 +266,17 @@ async def generate_and_send_act(message: Message, state: FSMContext):
 
 if __name__ == "__main__":
     import asyncio
-    asyncio.run(dp.start_polling(bot))
+    import traceback
+
+    async def main():
+        while True:
+            try:
+                print("🤖 Бот запущен...")
+                await dp.start_polling(bot)
+            except Exception as e:
+                logger.error(f"❌ Ошибка в работе бота: {e}")
+                traceback.print_exc()
+                await asyncio.sleep(5)  # Подождать перед перезапуском
+
+    asyncio.run(main())
+
